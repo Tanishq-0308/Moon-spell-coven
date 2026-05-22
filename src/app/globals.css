@@ -1,26 +1,49 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-deep: #0A0612;
+  --color-purple-dark: #150D2A;
+  --color-purple-mid: #1E1035;
+  --color-purple-light: #2D1F4E;
+  --color-purple-accent: #6B3FA0;
+  --color-gold: #C9A84C;
+  --color-gold-light: #E8D5A3;
+  --color-text-base: #EDE8F5;
+  --color-text-muted: #9B8EC4;
+  --color-border-faint: rgba(201, 168, 76, 0.2);
+
+  --font-display: var(--font-cinzel), serif;
+  --font-sans: var(--font-raleway), sans-serif;
+
+  --letter-spacing-luxe: 0.15em;
+  --letter-spacing-wide-luxe: 0.35em;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  background-color: var(--color-deep);
+  color: var(--color-text-base);
+  font-family: var(--font-sans);
+  font-weight: 300;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-deep);
 }
