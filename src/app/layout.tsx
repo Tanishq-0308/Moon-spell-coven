@@ -3,6 +3,7 @@ import { Cinzel, Raleway } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
+import { Providers } from "@/components/providers";
 import { SITE } from "@/lib/site";
 
 const cinzel = Cinzel({
@@ -71,9 +72,11 @@ export default function RootLayout({
       className={`${cinzel.variable} ${raleway.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Nav />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <Providers>
+          <Nav />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

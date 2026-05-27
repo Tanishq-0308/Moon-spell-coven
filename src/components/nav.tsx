@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import { NAV_LINKS, SITE } from "@/lib/site";
 
 export function Nav() {
   const [open, setOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const user = session?.user;
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border-faint bg-deep/95 backdrop-blur-md">
@@ -34,12 +37,48 @@ export function Nav() {
           ))}
         </ul>
 
-        <Link
-          href="/book"
-          className="hidden border border-gold bg-transparent px-4 py-2 font-display text-[11px] uppercase tracking-[0.15em] text-gold transition-colors hover:bg-gold hover:text-deep sm:inline-block md:px-5"
-        >
-          Book a Reading
-        </Link>
+        <div className="hidden items-center gap-3 sm:flex">
+          {status !== "loading" && user ? (
+            <>
+              {user.role === "ADMIN" && (
+                <Link
+                  href="/admin"
+                  className="text-[11px] uppercase tracking-[0.15em] text-text-muted transition-colors hover:text-gold"
+                >
+                  Admin
+                </Link>
+              )}
+              <Link
+                href="/account"
+                className="text-[12px] tracking-[0.05em] text-gold"
+              >
+                {user.name ?? "Account"}
+              </Link>
+              <button
+                type="button"
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="border border-border-faint px-4 py-2 font-display text-[11px] uppercase tracking-[0.15em] text-text-muted transition-colors hover:border-gold hover:text-gold"
+              >
+                Log Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="text-[11px] uppercase tracking-[0.15em] text-text-muted transition-colors hover:text-gold"
+              >
+                Log In
+              </Link>
+              <Link
+                href="/book"
+                className="border border-gold bg-transparent px-4 py-2 font-display text-[11px] uppercase tracking-[0.15em] text-gold transition-colors hover:bg-gold hover:text-deep md:px-5"
+              >
+                Book a Reading
+              </Link>
+            </>
+          )}
+        </div>
 
         <button
           type="button"
@@ -74,15 +113,63 @@ export function Nav() {
                 </Link>
               </li>
             ))}
-            <li className="pt-3 sm:hidden">
-              <Link
-                href="/book"
-                onClick={() => setOpen(false)}
-                className="inline-block border border-gold bg-transparent px-5 py-2 font-display text-[11px] uppercase tracking-[0.15em] text-gold transition-colors hover:bg-gold hover:text-deep"
-              >
-                Book a Reading
-              </Link>
-            </li>
+            {user ? (
+              <>
+                {user.role === "ADMIN" && (
+                  <li>
+                    <Link
+                      href="/admin"
+                      onClick={() => setOpen(false)}
+                      className="block py-3 text-[13px] uppercase tracking-[0.15em] text-text-muted transition-colors hover:text-gold"
+                    >
+                      Admin
+                    </Link>
+                  </li>
+                )}
+                <li>
+                  <Link
+                    href="/account"
+                    onClick={() => setOpen(false)}
+                    className="block py-3 text-[13px] uppercase tracking-[0.15em] text-gold"
+                  >
+                    {user.name ?? "Account"}
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      signOut({ callbackUrl: "/" });
+                    }}
+                    className="block py-3 text-[13px] uppercase tracking-[0.15em] text-text-muted transition-colors hover:text-gold"
+                  >
+                    Log Out
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link
+                    href="/login"
+                    onClick={() => setOpen(false)}
+                    className="block py-3 text-[13px] uppercase tracking-[0.15em] text-text-muted transition-colors hover:text-gold"
+                  >
+                    Log In
+                  </Link>
+                </li>
+                <li className="pt-3">
+                  <Link
+                    href="/book"
+                    onClick={() => setOpen(false)}
+                    className="inline-block border border-gold bg-transparent px-5 py-2 font-display text-[11px] uppercase tracking-[0.15em] text-gold transition-colors hover:bg-gold hover:text-deep"
+                  >
+                    Book a Reading
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       )}
