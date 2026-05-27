@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/ui";
 import { SERVICES } from "@/lib/services";
 import { formatINR } from "@/lib/utils";
+import { submitBooking } from "./actions";
 
 export const metadata: Metadata = {
   title: "Book a Reading — Astrology Consultation",
@@ -57,7 +58,7 @@ export default async function BookPage(props: PageProps<"/book">) {
             </div>
           </aside>
 
-          <form className="space-y-5 border border-border-faint bg-purple-dark p-6 sm:p-8">
+          <form action={submitBooking} className="space-y-5 border border-border-faint bg-purple-dark p-6 sm:p-8">
             <h2 className="mb-2 text-[18px] tracking-[0.08em] text-gold">
               Your Details
             </h2>
