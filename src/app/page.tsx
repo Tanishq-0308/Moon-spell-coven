@@ -7,7 +7,7 @@ import {
   SectionTitle,
 } from "@/components/ui";
 import { SERVICES } from "@/lib/services";
-import { CRYSTALS } from "@/lib/crystals";
+import { getPublishedCrystals } from "@/lib/crystals-db";
 import { BLOG_POSTS } from "@/lib/blog";
 import { formatINR } from "@/lib/utils";
 import { SITE } from "@/lib/site";
@@ -128,7 +128,8 @@ function ServicesSection() {
   );
 }
 
-function ShopSection() {
+async function ShopSection() {
+  const crystals = (await getPublishedCrystals()).slice(0, 4);
   return (
     <section className="bg-purple-dark px-[5%] py-16 sm:py-20 lg:py-24">
       <SectionTag>Crystal Shop</SectionTag>
@@ -142,7 +143,7 @@ function ShopSection() {
         cleansed under the full moon before dispatch.
       </SectionSub>
       <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-        {CRYSTALS.slice(0, 4).map((c) => (
+        {crystals.map((c) => (
           <Link
             key={c.slug}
             href={`/shop/${c.slug}`}

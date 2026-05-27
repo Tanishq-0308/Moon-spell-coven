@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/ui";
-import { CRYSTALS } from "@/lib/crystals";
+import { getPublishedCrystals } from "@/lib/crystals-db";
 import { formatINR } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -11,7 +11,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/shop" },
 };
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  const crystals = await getPublishedCrystals();
   return (
     <>
       <PageHero
@@ -22,7 +23,7 @@ export default function ShopPage() {
 
       <section className="px-[5%] pb-16 sm:pb-24">
         <div className="mx-auto grid max-w-6xl gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-          {CRYSTALS.map((c) => (
+          {crystals.map((c) => (
             <Link
               key={c.slug}
               href={`/shop/${c.slug}`}

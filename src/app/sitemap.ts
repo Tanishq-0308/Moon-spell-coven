@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { SERVICES } from "@/lib/services";
-import { CRYSTALS } from "@/lib/crystals";
+import { getPublishedCrystals } from "@/lib/crystals-db";
 import { BLOG_POSTS } from "@/lib/blog";
 import { ZODIAC } from "@/lib/zodiac";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE.url;
   const now = new Date();
+  const crystals = await getPublishedCrystals();
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${base}/`, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
@@ -27,7 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const shopPages: MetadataRoute.Sitemap = CRYSTALS.map((c) => ({
+  const shopPages: MetadataRoute.Sitemap = crystals.map((c) => ({
     url: `${base}/shop/${c.slug}`,
     lastModified: now,
     changeFrequency: "weekly",

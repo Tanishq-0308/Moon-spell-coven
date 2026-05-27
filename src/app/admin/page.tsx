@@ -25,6 +25,15 @@ export default async function AdminDashboardPage() {
           <Stat label="Subscribers" value={subscriberCount} />
           <Stat label="Users" value={userCount} />
         </div>
+
+        <div className="mx-auto mt-8 flex max-w-4xl flex-wrap justify-center gap-4">
+          <Link
+            href="/admin/crystals"
+            className="border border-gold px-6 py-3 font-display text-[12px] uppercase tracking-[0.15em] text-gold transition-colors hover:bg-gold hover:text-deep"
+          >
+            Manage Crystals
+          </Link>
+        </div>
       </section>
     </>
   );

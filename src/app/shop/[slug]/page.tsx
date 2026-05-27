@@ -2,19 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Divider, SectionTag } from "@/components/ui";
-import { CRYSTALS, getCrystal } from "@/lib/crystals";
+import { getCrystalBySlug, getPublishedCrystals } from "@/lib/crystals-db";
 import { formatINR } from "@/lib/utils";
 import { SITE } from "@/lib/site";
-
-export function generateStaticParams() {
-  return CRYSTALS.map((c) => ({ slug: c.slug }));
-}
 
 export async function generateMetadata(
   props: PageProps<"/shop/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const c = getCrystal(slug);
+  const c = await getCrystalBySlug(slug);
   if (!c) return {};
   return {
     title: `${c.name} — ${c.benefit}`,
@@ -32,8 +28,12 @@ export default async function CrystalDetailPage(
   props: PageProps<"/shop/[slug]">,
 ) {
   const { slug } = await props.params;
-  const c = getCrystal(slug);
+  const c = await getCrystalBySlug(slug);
   if (!c) notFound();
+
+  const others = (await getPublishedCrystals())
+    .filter((x) => x.slug !== c.slug)
+    .slice(0, 3);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -130,9 +130,7 @@ export default async function CrystalDetailPage(
           You May Also Love
         </h2>
         <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-          {CRYSTALS.filter((x) => x.slug !== c.slug)
-            .slice(0, 3)
-            .map((x) => (
+          {others.map((x) => (
               <Link
                 key={x.slug}
                 href={`/shop/${x.slug}`}

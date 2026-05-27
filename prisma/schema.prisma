@@ -83,6 +83,25 @@ model Subscriber {
   email     String   @unique
 }
 
+model Crystal {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  slug            String   @unique
+  name            String
+  emoji           String
+  benefit         String
+  longDescription String
+  price           Int
+  badge           String?  // "Bestseller" | "New" | null
+  properties      String[]
+  zodiac          String[]
+  chakra          String
+  origin          String
+  published       Boolean  @default(true)
+}
+
 enum BookingStatus {
   PENDING
   CONFIRMED
