@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
-import { SERVICES } from "@/lib/services";
+import { getPublishedServices } from "@/lib/services-db";
 import { getPublishedProducts } from "@/lib/products-db";
 import { BLOG_POSTS } from "@/lib/blog";
 import { ZODIAC } from "@/lib/zodiac";
@@ -9,6 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE.url;
   const now = new Date();
   const products = await getPublishedProducts();
+  const services = await getPublishedServices();
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${base}/`, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
@@ -21,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
   ];
 
-  const servicePages: MetadataRoute.Sitemap = SERVICES.map((s) => ({
+  const servicePages: MetadataRoute.Sitemap = services.map((s) => ({
     url: `${base}/services/${s.slug}`,
     lastModified: now,
     changeFrequency: "monthly",

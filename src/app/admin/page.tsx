@@ -33,6 +33,12 @@ export default async function AdminDashboardPage() {
           >
             Manage Products
           </Link>
+          <Link
+            href="/admin/services"
+            className="border border-gold px-6 py-3 font-display text-[12px] uppercase tracking-[0.15em] text-gold transition-colors hover:bg-gold hover:text-deep"
+          >
+            Manage Services
+          </Link>
         </div>
       </section>
     </>

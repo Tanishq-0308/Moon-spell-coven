@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/ui";
-import { SERVICES } from "@/lib/services";
+import { getPublishedServices } from "@/lib/services-db";
 import { formatINR } from "@/lib/utils";
 import { submitBooking } from "./actions";
 
@@ -17,6 +17,7 @@ export default async function BookPage(props: PageProps<"/book">) {
   const preselected = Array.isArray(preselectedRaw)
     ? preselectedRaw[0]
     : preselectedRaw;
+  const services = await getPublishedServices();
 
   return (
     <>
@@ -33,7 +34,7 @@ export default async function BookPage(props: PageProps<"/book">) {
               Choose a Service
             </h2>
             <div className="space-y-3">
-              {SERVICES.map((s) => (
+              {services.map((s) => (
                 <div
                   key={s.slug}
                   className={`border p-4 transition-colors ${
@@ -73,7 +74,7 @@ export default async function BookPage(props: PageProps<"/book">) {
               defaultValue={preselected ?? ""}
               options={[
                 { value: "", label: "Choose a service…" },
-                ...SERVICES.map((s) => ({ value: s.slug, label: s.name })),
+                ...services.map((s) => ({ value: s.slug, label: s.name })),
               ]}
               required
             />

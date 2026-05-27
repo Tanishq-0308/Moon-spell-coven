@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink, PageHero } from "@/components/ui";
-import { SERVICES } from "@/lib/services";
+import { getPublishedServices } from "@/lib/services-db";
 import { formatINR } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -11,7 +11,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services" },
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await getPublishedServices();
   return (
     <>
       <PageHero
@@ -22,7 +23,7 @@ export default function ServicesPage() {
 
       <section className="px-[5%] pb-16 sm:pb-24">
         <div className="mx-auto grid max-w-6xl gap-6 sm:gap-8 md:grid-cols-2">
-          {SERVICES.map((s) => (
+          {services.map((s) => (
             <Link
               key={s.slug}
               href={`/services/${s.slug}`}

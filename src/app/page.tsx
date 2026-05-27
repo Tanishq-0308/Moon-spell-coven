@@ -6,7 +6,7 @@ import {
   SectionTag,
   SectionTitle,
 } from "@/components/ui";
-import { SERVICES } from "@/lib/services";
+import { getPublishedServices } from "@/lib/services-db";
 import { getPublishedProducts } from "@/lib/products-db";
 import { ProductImage } from "@/components/product-image";
 import { BLOG_POSTS } from "@/lib/blog";
@@ -84,7 +84,9 @@ function Stat({ num, label }: { num: string; label: string }) {
   );
 }
 
-function ServicesSection() {
+async function ServicesSection() {
+  const services = await getPublishedServices();
+  if (services.length === 0) return null;
   return (
     <section className="px-[5%] py-16 sm:py-20 lg:py-24">
       <SectionTag>Our Services</SectionTag>
@@ -98,7 +100,7 @@ function ServicesSection() {
         and direction.
       </SectionSub>
       <div className="grid gap-px border border-border-faint bg-border-faint sm:grid-cols-2 lg:grid-cols-4">
-        {SERVICES.map((s) => (
+        {services.map((s) => (
           <Link
             key={s.slug}
             href={`/services/${s.slug}`}

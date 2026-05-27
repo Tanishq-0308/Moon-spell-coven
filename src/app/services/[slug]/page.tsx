@@ -2,19 +2,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonLink, Divider, SectionTag } from "@/components/ui";
-import { SERVICES, getService } from "@/lib/services";
+import {
+  getServiceBySlug,
+  getPublishedServices,
+  type ServiceFaq,
+} from "@/lib/services-db";
 import { formatINR } from "@/lib/utils";
 import { SITE } from "@/lib/site";
-
-export function generateStaticParams() {
-  return SERVICES.map((s) => ({ slug: s.slug }));
-}
 
 export async function generateMetadata(
   props: PageProps<"/services/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const service = getService(slug);
+  const service = await getServiceBySlug(slug);
   if (!service) return {};
   return {
     title: `${service.name} — ${formatINR(service.price)}`,
@@ -32,8 +32,14 @@ export default async function ServiceDetailPage(
   props: PageProps<"/services/[slug]">,
 ) {
   const { slug } = await props.params;
-  const service = getService(slug);
+  const service = await getServiceBySlug(slug);
   if (!service) notFound();
+
+  // faqs is stored as JSON; cast it to the known shape for rendering.
+  const faqs = (service.faqs as ServiceFaq[] | null) ?? [];
+  const others = (await getPublishedServices()).filter(
+    (s) => s.slug !== service.slug,
+  );
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -108,7 +114,7 @@ export default async function ServiceDetailPage(
               Frequently Asked
             </h2>
             <div className="space-y-5">
-              {service.faqs.map((faq) => (
+              {faqs.map((faq) => (
                 <div key={faq.q} className="border-l-2 border-gold/40 pl-4">
                   <div className="mb-1 font-display text-[14px] tracking-[0.05em]">
                     {faq.q}
@@ -130,7 +136,7 @@ export default async function ServiceDetailPage(
           Other Services
         </h2>
         <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 sm:gap-6 md:grid-cols-3">
-          {SERVICES.filter((s) => s.slug !== service.slug).map((s) => (
+          {others.map((s) => (
             <Link
               key={s.slug}
               href={`/services/${s.slug}`}

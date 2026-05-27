@@ -105,6 +105,25 @@ model Product {
   origin          String?
 }
 
+model Service {
+  id              String          @id @default(cuid())
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  slug            String          @unique
+  name            String
+  shortName       String?
+  icon            String?
+  tagline         String
+  description     String
+  longDescription String
+  price           Int
+  duration        String
+  includes        String[]
+  faqs            Json?    // [{ q, a }] — optional FAQ list
+  published       Boolean  @default(true)
+}
+
 enum BookingStatus {
   PENDING
   CONFIRMED
