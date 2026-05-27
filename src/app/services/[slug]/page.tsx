@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonLink, Divider, SectionTag } from "@/components/ui";
+import { ProductImage } from "@/components/product-image";
 import {
   getServiceBySlug,
   getPublishedServices,
@@ -66,7 +67,15 @@ export default async function ServiceDetailPage(
           >
             ← All Services
           </Link>
-          <div className="mb-6 text-[48px] sm:text-[64px]">{service.icon}</div>
+          {service.imageUrl && (
+            <ProductImage
+              src={service.imageUrl}
+              alt={service.name}
+              priority
+              className="mb-8 h-56 border border-border-faint sm:h-72"
+              sizes="(max-width: 896px) 100vw, 896px"
+            />
+          )}
           <SectionTag>{service.tagline}</SectionTag>
           <h1 className="mb-6 text-[clamp(1.8rem,6vw,3.5rem)] leading-[1.15]">
             {service.name}
@@ -140,14 +149,21 @@ export default async function ServiceDetailPage(
             <Link
               key={s.slug}
               href={`/services/${s.slug}`}
-              className="block border border-border-faint bg-purple-mid p-6 transition-colors hover:border-gold"
+              className="block overflow-hidden border border-border-faint bg-purple-mid transition-colors hover:border-gold"
             >
-              <div className="mb-3 text-[32px]">{s.icon}</div>
+              <ProductImage
+                src={s.imageUrl}
+                alt={s.name}
+                className="h-32"
+                sizes="(max-width: 768px) 50vw, 33vw"
+              />
+              <div className="p-6">
               <h3 className="mb-2 text-[14px] tracking-[0.08em] text-gold">
                 {s.name}
               </h3>
               <div className="font-display text-[14px] text-text-base">
                 {formatINR(s.price)}
+              </div>
               </div>
             </Link>
           ))}

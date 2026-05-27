@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { type Service, type ServiceFaq } from "@/lib/services-db";
+import { ImageUpload } from "@/app/admin/products/image-upload";
 
 export function ServiceForm({
   action,
@@ -18,6 +19,8 @@ export function ServiceForm({
       action={action}
       className="space-y-5 border border-border-faint bg-purple-dark p-8"
     >
+      <ImageUpload defaultUrl={service?.imageUrl} />
+
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Name" name="name" defaultValue={service?.name} required />
         <Field
@@ -28,20 +31,12 @@ export function ServiceForm({
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-[120px_1fr]">
-        <Field
-          label="Icon (emoji)"
-          name="icon"
-          defaultValue={service?.icon ?? ""}
-          placeholder="🔮"
-        />
-        <Field
-          label="Slug (optional)"
-          name="slug"
-          defaultValue={service?.slug}
-          placeholder="auto-generated from name"
-        />
-      </div>
+      <Field
+        label="Slug (optional)"
+        name="slug"
+        defaultValue={service?.slug}
+        placeholder="auto-generated from name"
+      />
 
       <Field
         label="Tagline"

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAllServices } from "@/lib/services-db";
 import { formatINR } from "@/lib/utils";
 import { PageHero } from "@/components/ui";
+import { ProductImage } from "@/components/product-image";
 import { DeleteServiceButton } from "./delete-button";
 
 export default async function AdminServicesPage() {
@@ -36,7 +37,12 @@ export default async function AdminServicesPage() {
                   key={s.id}
                   className="flex items-center gap-4 bg-purple-dark p-4"
                 >
-                  <div className="text-[28px]">{s.icon ?? "✦"}</div>
+                  <ProductImage
+                    src={s.imageUrl}
+                    alt={s.name}
+                    className="h-14 w-14 shrink-0 border border-border-faint"
+                    sizes="56px"
+                  />
                   <div className="flex-1">
                     <div className="font-display text-[15px] tracking-[0.05em]">
                       {s.name}

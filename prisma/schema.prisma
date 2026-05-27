@@ -113,7 +113,8 @@ model Service {
   slug            String          @unique
   name            String
   shortName       String?
-  icon            String?
+  imageUrl        String?         // Cloudinary URL of the service image
+  icon            String?         // legacy emoji fallback
   tagline         String
   description     String
   longDescription String

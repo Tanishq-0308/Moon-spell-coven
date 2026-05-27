@@ -104,9 +104,15 @@ async function ServicesSection() {
           <Link
             key={s.slug}
             href={`/services/${s.slug}`}
-            className="group block bg-purple-dark p-7 transition-colors hover:bg-purple-mid sm:p-8 lg:p-10"
+            className="group block bg-purple-dark transition-colors hover:bg-purple-mid"
           >
-            <div className="mb-4 text-[28px]">{s.icon}</div>
+            <ProductImage
+              src={s.imageUrl}
+              alt={s.name}
+              className="h-36"
+              sizes="(max-width: 640px) 100vw, 25vw"
+            />
+            <div className="p-7 sm:p-8 lg:p-10">
             <h3 className="mb-2 text-[14px] tracking-[0.1em] text-gold">
               {s.name}
             </h3>
@@ -118,6 +124,7 @@ async function ServicesSection() {
               <span className="font-sans text-[11px] text-text-muted">
                 / {s.duration}
               </span>
+            </div>
             </div>
           </Link>
         ))}

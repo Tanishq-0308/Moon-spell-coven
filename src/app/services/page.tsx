@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink, PageHero } from "@/components/ui";
+import { ProductImage } from "@/components/product-image";
 import { getPublishedServices } from "@/lib/services-db";
 import { formatINR } from "@/lib/utils";
 
@@ -27,19 +28,25 @@ export default async function ServicesPage() {
             <Link
               key={s.slug}
               href={`/services/${s.slug}`}
-              className="group block border border-border-faint bg-purple-dark p-7 transition-colors hover:bg-purple-mid sm:p-8 lg:p-10"
+              className="group block overflow-hidden border border-border-faint bg-purple-dark transition-colors hover:bg-purple-mid"
             >
-              <div className="mb-4 text-[40px]">{s.icon}</div>
-              <h2 className="mb-2 text-[20px] tracking-[0.08em] text-gold">
-                {s.name}
-              </h2>
-              <p className="mb-5 text-[14px] uppercase tracking-[0.2em] text-text-muted">
-                {s.tagline}
-              </p>
-              <p className="mb-6 text-[14px] leading-[1.8] text-text-muted">
-                {s.description}
-              </p>
-              <div className="flex items-center justify-between border-t border-border-faint pt-5">
+              <ProductImage
+                src={s.imageUrl}
+                alt={s.name}
+                className="h-48"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="p-7 sm:p-8 lg:p-10">
+                <h2 className="mb-2 text-[20px] tracking-[0.08em] text-gold">
+                  {s.name}
+                </h2>
+                <p className="mb-5 text-[14px] uppercase tracking-[0.2em] text-text-muted">
+                  {s.tagline}
+                </p>
+                <p className="mb-6 text-[14px] leading-[1.8] text-text-muted">
+                  {s.description}
+                </p>
+                <div className="flex items-center justify-between border-t border-border-faint pt-5">
                 <div className="font-display text-[18px] text-text-base">
                   {formatINR(s.price)}{" "}
                   <span className="text-[12px] text-text-muted">
@@ -49,6 +56,7 @@ export default async function ServicesPage() {
                 <span className="font-display text-[12px] tracking-[0.15em] text-gold">
                   Learn More →
                 </span>
+                </div>
               </div>
             </Link>
           ))}

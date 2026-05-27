@@ -49,7 +49,9 @@ function readForm(formData: FormData) {
     shortName: ((formData.get("shortName") as string)?.trim() || null) as
       | string
       | null,
-    icon: ((formData.get("icon") as string)?.trim() || null) as string | null,
+    imageUrl: ((formData.get("imageUrl") as string)?.trim() || null) as
+      | string
+      | null,
     tagline: (formData.get("tagline") as string)?.trim(),
     description: (formData.get("description") as string)?.trim(),
     longDescription: (formData.get("longDescription") as string)?.trim(),
