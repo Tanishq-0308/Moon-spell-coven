@@ -1,81 +1,105 @@
 import Link from "next/link";
-import type { Crystal } from "@/lib/crystals-db";
+import { type Product, ProductCategory, CATEGORY_LABELS } from "@/lib/products-db";
+import { ImageUpload } from "./image-upload";
 
-// Server-rendered form. `action` is a server action bound by the parent page.
-export function CrystalForm({
+export function ProductForm({
   action,
-  crystal,
+  product,
   submitLabel,
 }: {
   action: (formData: FormData) => void;
-  crystal?: Crystal;
+  product?: Product;
   submitLabel: string;
 }) {
   return (
-    <form action={action} className="space-y-5 border border-border-faint bg-purple-dark p-8">
+    <form
+      action={action}
+      className="space-y-5 border border-border-faint bg-purple-dark p-8"
+    >
+      <ImageUpload defaultUrl={product?.imageUrl} />
+
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Name" name="name" defaultValue={crystal?.name} required />
+        <Field label="Name" name="name" defaultValue={product?.name} required />
+        <Select
+          label="Category"
+          name="category"
+          defaultValue={product?.category ?? ProductCategory.CRYSTAL}
+          options={Object.values(ProductCategory).map((c) => ({
+            value: c,
+            label: CATEGORY_LABELS[c],
+          }))}
+        />
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-2">
         <Field
           label="Slug (optional)"
           name="slug"
-          defaultValue={crystal?.slug}
+          defaultValue={product?.slug}
           placeholder="auto-generated from name"
         />
-      </div>
-
-      <div className="grid gap-5 sm:grid-cols-[120px_1fr]">
-        <Field label="Emoji" name="emoji" defaultValue={crystal?.emoji} />
         <Field
-          label="Benefit (short tagline)"
-          name="benefit"
-          defaultValue={crystal?.benefit}
-          required
-        />
-      </div>
-
-      <Textarea
-        label="Long Description"
-        name="longDescription"
-        defaultValue={crystal?.longDescription}
-        required
-      />
-
-      <div className="grid gap-5 sm:grid-cols-3">
-        <Field
-          label="Price (₹)"
-          name="price"
-          type="number"
-          defaultValue={crystal?.price?.toString()}
-          required
-        />
-        <Field label="Chakra" name="chakra" defaultValue={crystal?.chakra} required />
-        <Field
-          label="Badge"
+          label="Badge (optional)"
           name="badge"
-          defaultValue={crystal?.badge ?? ""}
+          defaultValue={product?.badge ?? ""}
           placeholder="Bestseller / New"
         />
       </div>
 
       <Field
-        label="Properties (comma-separated)"
+        label="Benefit (short tagline)"
+        name="benefit"
+        defaultValue={product?.benefit}
+        required
+      />
+
+      <Textarea
+        label="Long Description"
+        name="longDescription"
+        defaultValue={product?.longDescription}
+        required
+      />
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field
+          label="Price (₹)"
+          name="price"
+          type="number"
+          defaultValue={product?.price?.toString()}
+          required
+        />
+        <Field
+          label="Chakra (crystals only)"
+          name="chakra"
+          defaultValue={product?.chakra ?? ""}
+        />
+      </div>
+
+      <Field
+        label="Properties (comma-separated, optional)"
         name="properties"
-        defaultValue={crystal?.properties.join(", ")}
+        defaultValue={product?.properties.join(", ")}
         placeholder="Love, Calm, Protection"
       />
-      <Field
-        label="Zodiac (comma-separated)"
-        name="zodiac"
-        defaultValue={crystal?.zodiac.join(", ")}
-        placeholder="Taurus, Libra"
-      />
-      <Field label="Origin" name="origin" defaultValue={crystal?.origin} />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field
+          label="Zodiac (comma-separated, optional)"
+          name="zodiac"
+          defaultValue={product?.zodiac.join(", ")}
+          placeholder="Taurus, Libra"
+        />
+        <Field
+          label="Origin (optional)"
+          name="origin"
+          defaultValue={product?.origin ?? ""}
+        />
+      </div>
 
       <label className="flex items-center gap-3 text-[13px] text-text-muted">
         <input
           type="checkbox"
           name="published"
-          defaultChecked={crystal?.published ?? true}
+          defaultChecked={product?.published ?? true}
           className="h-4 w-4 accent-gold"
         />
         Published (visible in shop)
@@ -89,7 +113,7 @@ export function CrystalForm({
           {submitLabel}
         </button>
         <Link
-          href="/admin/crystals"
+          href="/admin/products"
           className="text-[12px] uppercase tracking-[0.15em] text-text-muted hover:text-gold"
         >
           Cancel
@@ -131,6 +155,41 @@ function Field({
         placeholder={placeholder}
         className="w-full border border-border-faint bg-purple-mid px-4 py-3 text-[14px] text-text-base placeholder:text-text-muted/50 focus:border-gold focus:outline-none"
       />
+    </div>
+  );
+}
+
+function Select({
+  label,
+  name,
+  defaultValue,
+  options,
+}: {
+  label: string;
+  name: string;
+  defaultValue: string;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <div>
+      <label
+        htmlFor={name}
+        className="mb-2 block text-[11px] uppercase tracking-[0.2em] text-gold"
+      >
+        {label}
+      </label>
+      <select
+        id={name}
+        name={name}
+        defaultValue={defaultValue}
+        className="w-full border border-border-faint bg-purple-mid px-4 py-3 text-[14px] text-text-base focus:border-gold focus:outline-none"
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }

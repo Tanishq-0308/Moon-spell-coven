@@ -7,7 +7,8 @@ import {
   SectionTitle,
 } from "@/components/ui";
 import { SERVICES } from "@/lib/services";
-import { getPublishedCrystals } from "@/lib/crystals-db";
+import { getPublishedProducts } from "@/lib/products-db";
+import { ProductImage } from "@/components/product-image";
 import { BLOG_POSTS } from "@/lib/blog";
 import { formatINR } from "@/lib/utils";
 import { SITE } from "@/lib/site";
@@ -129,44 +130,48 @@ function ServicesSection() {
 }
 
 async function ShopSection() {
-  const crystals = (await getPublishedCrystals()).slice(0, 4);
+  const products = (await getPublishedProducts()).slice(0, 4);
+  if (products.length === 0) return null;
   return (
     <section className="bg-purple-dark px-[5%] py-16 sm:py-20 lg:py-24">
-      <SectionTag>Crystal Shop</SectionTag>
+      <SectionTag>Shop</SectionTag>
       <SectionTitle>
-        Sacred Crystals
+        Sacred Goods
         <br />
         For Every Journey
       </SectionTitle>
       <SectionSub>
-        Genuine, energised crystals sourced with intention. Each crystal is
-        cleansed under the full moon before dispatch.
+        Genuine crystals and spiritual tools, sourced with intention. Each item
+        is cleansed under the full moon before dispatch.
       </SectionSub>
       <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-        {crystals.map((c) => (
+        {products.map((p) => (
           <Link
-            key={c.slug}
-            href={`/shop/${c.slug}`}
+            key={p.id}
+            href={`/shop/${p.slug}`}
             className="group block overflow-hidden border border-border-faint bg-purple-mid transition-all hover:-translate-y-1 hover:border-gold"
           >
-            <div className="flex h-44 items-center justify-center bg-purple-light text-[64px]">
-              {c.emoji}
-            </div>
+            <ProductImage
+              src={p.imageUrl}
+              alt={p.name}
+              className="h-44"
+              sizes="(max-width: 640px) 100vw, 25vw"
+            />
             <div className="p-5">
-              {c.badge && (
+              {p.badge && (
                 <span className="mb-2 inline-block bg-purple-accent px-2 py-[3px] font-display text-[10px] tracking-[0.1em] text-gold-light">
-                  {c.badge}
+                  {p.badge}
                 </span>
               )}
               <div className="mb-1 font-display text-[13px] tracking-[0.08em]">
-                {c.name}
+                {p.name}
               </div>
               <div className="mb-3 text-[12px] leading-[1.5] text-text-muted">
-                {c.benefit}
+                {p.benefit}
               </div>
               <div className="flex items-center justify-between">
                 <span className="font-display text-[15px] text-gold">
-                  {formatINR(c.price)}
+                  {formatINR(p.price)}
                 </span>
                 <span className="border border-gold px-3 py-1 font-display text-[11px] tracking-[0.1em] text-gold transition-colors group-hover:bg-gold group-hover:text-deep">
                   View

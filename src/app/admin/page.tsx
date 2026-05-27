@@ -28,10 +28,10 @@ export default async function AdminDashboardPage() {
 
         <div className="mx-auto mt-8 flex max-w-4xl flex-wrap justify-center gap-4">
           <Link
-            href="/admin/crystals"
+            href="/admin/products"
             className="border border-gold px-6 py-3 font-display text-[12px] uppercase tracking-[0.15em] text-gold transition-colors hover:bg-gold hover:text-deep"
           >
-            Manage Crystals
+            Manage Products
           </Link>
         </div>
       </section>
